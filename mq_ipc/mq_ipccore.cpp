@@ -1,6 +1,5 @@
 #include<iostream>
 #include<string.h>
-//#include"mq_common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
