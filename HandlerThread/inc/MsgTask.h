@@ -2,7 +2,6 @@
 #include <pthread.h>
 #include"DllQueue.h"
 
-
 class MsgTask
 {
     string mThreadname;

@@ -4,6 +4,7 @@
 // If a given process want to send any hing to other process the it should open 
 // the other process queue in write only mode
  ***********************************/
+
 #include<iostream>
 #include<string.h>
 #ifdef __cplusplus

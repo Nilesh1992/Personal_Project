@@ -2,7 +2,6 @@
 using namespace std;
 
 void* run(void*);
-
 MsgTask::MsgTask(string name)
 {
     mThreadname = name;

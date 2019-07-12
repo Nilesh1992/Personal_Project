@@ -1,6 +1,5 @@
 #include<iostream>
 #include"../inc/DriverClass.h"
-
 int main()
 {
     DriverClass *DC = new DriverClass();

@@ -1,7 +1,6 @@
 #include<iostream>
 #include"LocMsg.h"
 using namespace std;
-
 typedef struct node
 {
     struct node* next;

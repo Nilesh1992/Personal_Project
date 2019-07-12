@@ -1,7 +1,6 @@
 #include<iostream>
 #include"../../HandlerThread/inc/MsgTask.h"
 #include<string.h>
-
 class DriverClass {
     MsgTask* mMsgTaskPtr;
     public:
