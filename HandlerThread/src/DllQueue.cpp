@@ -1,4 +1,4 @@
-#include"DllQueue.h"
+#include"../inc/DllQueue.h"
 using namespace std;
 
 int DllQueue::enqueue(LocMsg *msg)

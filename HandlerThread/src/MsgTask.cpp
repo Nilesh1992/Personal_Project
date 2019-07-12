@@ -1,4 +1,4 @@
-#include"MsgTask.h"
+#include"../inc/MsgTask.h"
 using namespace std;
 
 void* run(void*);
