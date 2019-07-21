@@ -2,6 +2,7 @@
 
 using namespace mq_ipccore;
 
+
 mqd_t IpcCore::createMq(const char* name, int create_flags, mode_t mode = O_RDONLY, 
         struct mq_attr *attrs = NULL)
 {
