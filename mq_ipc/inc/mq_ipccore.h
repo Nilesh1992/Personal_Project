@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<string.h>
+#include<signal.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -16,29 +17,34 @@ extern "C" {
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>
 #include <errno.h>
+#include <unistd.h>
     /* For mode constants */
 #ifdef __cplusplus
 }
 #endif
 using namespace std;
-
 namespace mq_ipccore {
     class IpcCore {
         private:
-            mqd_t queue_id;
+            mqd_t mqueue_id;
             int error_code;
+            char* queue_name;
             struct mq_attr default_attrs;
+            struct sigevent *notifyCallbackInfo; 
         public:
-            IpcCore():queue_id(-1),error_code(0){
-                memset(&default_attrs,0,sizeof(default_attrs)); 
+            IpcCore():mqueue_id(-1),error_code(0),queue_name(NULL),
+            notifyCallbackInfo(NULL){
+                memset(&default_attrs,0,sizeof(default_attrs));
                 default_attrs.mq_maxmsg = 10;
                 default_attrs.mq_msgsize = 100;
             };
             mqd_t createMq(const char* name, int create_flags, mode_t mode, 
                     struct mq_attr *attrs);
-            int destroyMq(mqd_t);
-            //int subscribeToMq();
-            //int unsubscribeToMq();
+            int destroyMq();
+            int closeConnectionMq(mqd_t);
+            int subscribeToMq();
+            friend void notifyDataAvailableCallback(union sigval);
+            int unsubscribeToMq();
             //virtual bool sendToMq();
             //virtual bool recvFromMq();
     };
