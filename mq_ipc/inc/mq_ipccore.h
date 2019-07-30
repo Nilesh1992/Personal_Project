@@ -1,7 +1,7 @@
 /*************************i************
-//Bottom line is 
+//Bottom line is
 // A given process should one its process queue in readonly mode
-// If a given process want to send any hing to other process the it should open 
+// If a given process want to send any hing to other process the it should open
 // the other process queue in write only mode
  ***********************************/
 
@@ -26,27 +26,28 @@ using namespace std;
 namespace mq_ipccore {
     class IpcCore {
         private:
-            mqd_t mqueue_id;
             int error_code;
-            char* queue_name;
             struct mq_attr default_attrs;
-            struct sigevent *notifyCallbackInfo; 
+            struct sigevent *notifyCallbackInfo;
         public:
+            mqd_t mqueue_id;
+            char* queue_name;
             IpcCore():mqueue_id(-1),error_code(0),queue_name(NULL),
             notifyCallbackInfo(NULL){
                 memset(&default_attrs,0,sizeof(default_attrs));
                 default_attrs.mq_maxmsg = 10;
                 default_attrs.mq_msgsize = 100;
             };
-            mqd_t createMq(const char* name, int create_flags, mode_t mode, 
+            mqd_t createMq(const char* name, int create_flags, mode_t mode,
                     struct mq_attr *attrs);
             int destroyMq();
-            int closeConnectionMq(mqd_t);
+            int ParamForceDestroy(const char*);
+                int closeConnectionMq(mqd_t);
             int subscribeToMq();
             friend void notifyDataAvailableCallback(union sigval);
             int unsubscribeToMq();
-            //virtual bool sendToMq();
-            //virtual bool recvFromMq();
+            bool sendToMq(mqd_t,char*, size_t, unsigned int);
+            bool recvFromMq(char*, size_t, unsigned int*);
     };
 }
 
