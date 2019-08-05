@@ -8,6 +8,8 @@
 #include<iostream>
 #include<string.h>
 #include<signal.h>
+#include<queue>
+#include <pthread.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,10 +32,12 @@ namespace mq_ipccore {
             struct mq_attr default_attrs;
             struct sigevent *notifyCallbackInfo;
         public:
+            queue <void*> notification_data;
+            pthread_mutex_t mNotificationQueueMutex = PTHREAD_MUTEX_INITIALIZER;
             mqd_t mqueue_id;
             char* queue_name;
             IpcCore():mqueue_id(-1),error_code(0),queue_name(NULL),
-            notifyCallbackInfo(NULL){
+            notifyCallbackInfo(NULL),notification_data(){
                 memset(&default_attrs,0,sizeof(default_attrs));
                 default_attrs.mq_maxmsg = 10;
                 default_attrs.mq_msgsize = 100;
