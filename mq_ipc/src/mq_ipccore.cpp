@@ -82,10 +82,12 @@ void notifyDataAvailableCallback(union sigval nofication)
         //api we will update here too
         if(nr == true){
             buf[strlen(buf)] = '\0';
-            printf("Read %s bytes from MQ and size is ->> %d\n", buf, strlen(buf));
+            //printf("Read %s bytes from MQ and size is ->> %d\n", buf, strlen(buf));
+            pthread_mutex_lock( &(object_ptr->mNotificationQueueMutex));
+            object_ptr->notification_data.push((void*) buf);
+            pthread_mutex_unlock(&(object_ptr->mNotificationQueueMutex));
             sleep(1);
         }
-        free(buf);
     }while(nr == true);
     object_ptr->subscribeToMq();
     cout << "Going to exit the current notification thread" << endl;
@@ -139,6 +141,7 @@ int main()
     mqd_t queue_id = -1 ;
     char name[] = "This is nilesh string one";
     char name1[] = "This is nilesh stting two nfnslfn";
+    void* data = NULL;
     char receiver[MAX_QUEUE_LENGTH];
     IpcCore *mq_sender_client = new mq_ipccore::IpcCore();
     //queue_id = mq_sender_client->createMq("/Niles", O_CREAT|O_WRONLY, 0644);
@@ -168,5 +171,17 @@ int main()
     //cout << "Received data is  --> " << receiver << endl;
     //cout << "Closing the connection" << mq_sender_client->closeConnectionMq(queue_id)<<endl;
     //return 0;
+
+    while(1)
+    {
+        pthread_mutex_lock(&(mq_sender_client->mNotificationQueueMutex));
+        if(!mq_sender_client->notification_data.empty())
+        {
+            cout << "Accessing data from the queu:" << (char*) (mq_sender_client->notification_data.front()) << endl;
+            mq_sender_client->notification_data.pop(); 
+        }
+        pthread_mutex_unlock(&(mq_sender_client->mNotificationQueueMutex));
+        sleep(2);
+    }
     pause();
 }
